@@ -1,0 +1,12 @@
+<ksanchez@cldeveloper.com>
+
+- A LAN includes all devices in the same broadcast domain.
+
+- A broadcast domain includes the set of all LAN-connected devices, so that when any of the devices sends a broadcast frame, all the other devices get a copy of the frame.
+
+- Without VLANs, a switch considers all its interfaces to be in the same broadcast domain.
+
+- With VLANs, a switch can configure some interfaces into one broadcast domain and some into another, creating multiple broadcast domains. These individual broadcast domains created by the switch are called virtual LANs (VLAN).
+
+
+ The following list summarizes the most common reasons for choosing to create smaller broadcast domains (VLANs):

@@ -1,5 +1,11 @@
 Switch Configuration Commands
 
+Notas:
+
+- Los Switches se pueden configurar en modo acceso y modo troncal (Trunk)
+- Los switches tienen configuradas una Vlan (Vlan1) por defecto para todos los puertos.
+
+
 - configure terminal
 - interface vlan 1
 - interface fastethernet 0/1
