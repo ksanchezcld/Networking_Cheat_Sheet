@@ -1,0 +1,25 @@
+Switch Configuration Commands
+
+- configure terminal
+- interface vlan 1
+- interface fastethernet 0/1
+- ipaddress 10.0.0.1 255.0.0.0
+- shutdown
+- exit
+- end
+- show ip interface brief	
+- show running-config
+- show flash
+- show vlan
+- show interfaces fastEthernet 0/9 switchport
+- vlan # -> vlan 10
+- name vlan_office
+- vlan 30 
+	- name office_sec_floor
+- switchport access vlan 10
+- switchport trunk encapsulation dot1q
+- switchport mode trunk 
+- show interface trunk
+- interfaces trunk
+- switchport trunk allowed vlan 1,10-25,30,40-199,1002-1005
+- switchport trunk allowed vlan remove 19
