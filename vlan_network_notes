@@ -38,3 +38,7 @@ VLAN Trunking
 - The use of trunking allows switches to pass frames from multiple VLANs over a single physical connection by adding a small header to the Ethernet frame.
 
 - When SW2 receives the frame, it understands that the frame is in VLAN 10. SW2 then removes the VLAN header, forwarding the original frame out its interfaces in VLAN 10.
+
+- Cisco has supported two different trunking protocols over the years: Inter-Switch Link (ISL) and IEEE 802.1Q.
+		- 802.1Q inserts an extra 4-byte 802.1Q VLAN header into the original frame’s Ethernet header.
+		- 
