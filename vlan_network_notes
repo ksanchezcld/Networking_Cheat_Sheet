@@ -10,3 +10,31 @@
 
 
  The following list summarizes the most common reasons for choosing to create smaller broadcast domains (VLANs):
+
+ ■ To reduce CPU overhead on each device by reducing the number of devices that receive each broadcast frame.
+
+ ■ To reduce security risks by reducing the number of hosts that receive copies of frames that the switches flood (broadcasts, multicasts, and unknown unicasts)
+
+ ■ To improve security for hosts that send sensitive data by keeping those hosts on a separate
+VLAN.
+
+■ To create more flexible designs that group users by department, or by groups that work together, instead of by physical location.
+
+■ To solve problems more quickly, because the failure domain for many problems is the same set of devices as those in the same broadcast domain.
+
+■ To reduce the workload for the Spanning Tree Protocol (STP) by limiting a VLAN to a single access switch.
+
+--------------
+VLAN Trunking
+--------------
+- When using VLANs in networks that have multiple interconnected switches, the switches need to use VLAN trunking on the links between the switches.
+
+- VLAN trunking causes the switches to use a process called VLAN tagging.
+
+- VLAN Tagging:  is when the sending switch adds another header to the frame before sending it over the trunk.
+
+- The extra trunking header includes a VLAN identifier (VLAN ID) field so that the sending switch can associate the frame with a particular VLAN ID, and the receiving switch can then know in what VLAN each frame belongs.
+
+- The use of trunking allows switches to pass frames from multiple VLANs over a single physical connection by adding a small header to the Ethernet frame.
+
+- When SW2 receives the frame, it understands that the frame is in VLAN 10. SW2 then removes the VLAN header, forwarding the original frame out its interfaces in VLAN 10.
