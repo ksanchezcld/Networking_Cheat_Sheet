@@ -1,3 +1,10 @@
+<ksanchez@cldeveloper.com>
+
+-----------------
+ GNS3 Community
+-----------------
+- https://gns3.com/support/docs/virtual-machines-supported-2
+
 ------------------------
 Cisco Feature Navigator
 ------------------------
@@ -8,9 +15,9 @@ If you want to see what your IOS images you downloades has as features, this is 
 
  - http://tools.cisco.com/ITDIT/CFN/jsp/SearchBySoftware.jsp
 
----------------------
-GNS3 Images Download
----------------------
+--------------------------
+ GNS3 IOS Images Download
+--------------------------
 
 - https://gns3.com/qa/iou-vm-image
 
@@ -24,6 +31,14 @@ GNS3 Images Download
 
 - http://www.w7cloud.com/latest-cisco-3745-ios-image-for-gns3/
 
+- http://commonerrors.blogspot.com/2013/10/download-asa-iosimage-for-gns3.html
+
+- http://letusexplain.blogspot.com/2015/08/step-by-step-to-add-cisco-asa-on-gns3.html
+
+- https://plus.google.com/116532165669637416992/posts/6mpL8dmtt4j   <<<< Available at this moment 06/04/2016.
+
+- http://srijit.com/use-cisco-asa-8-4-gns3/
+
 - https://mega.nz/#F!nJR3BTjJ!N5wZsncqDkdKyFQLELU1wQ
 
 - https://www.copy.com/s/t%3A9BVTtgCpW1pN%3Bp%3A%252FGNS3%2520Images%3Boid%3A5393
@@ -32,8 +47,33 @@ GNS3 Images Download
 
 PASSWORD IF NEED: tutgfx
 
+-------------------
+Configuring ASA FW
+-------------------
+
+Configure GNS3 preferrences -> QEMU -> ASA with below settings
+
+RAM: 1024 MiB
+Number of NICs: 6
+Qemu options: -m 1024 -icount auto -hdachs 980,16,32
+
+Initrd: C:\ASA\asa842-initrd.gz
+Kernel: C:\ASA\asa842-vmlinuz
+Kernel cmd line: -append ide_generic.probe_mask=0x01 ide_core.chs=0.0:980,16,32 auto nousb console=ttyS0,9600 bigphysarea=65536
+
+4- Activate the licenses using below codes:
 
 
+activation-key 0x4a3ec071 0x0d86fbf6 0x7cb1bc48 0x8b48b8b0 0xf317c0b5 
+
+activation-key 0xb23bcf4a 0x1c713b4f 0x7d53bcbc 0xc4f8d09c 0x0e24c6b6﻿
+
+Reference: https://plus.google.com/116532165669637416992/posts/6mpL8dmtt4j
+
+----------
+ Forums
+----------
+- http://www.xerunetworks.com/2012/02/cisco-asa-84-on-gns3/
 
 =================
  TRAININGS GNS3
