@@ -32,3 +32,55 @@ Notas:
 - interfaces trunk
 - switchport trunk allowed vlan 1,10-25,30,40-199,1002-1005
 - switchport trunk allowed vlan remove 19
+
+
+
+==============
+ LABORATORIES
+==============
+
+--------
+ LAB #1
+--------
+1.- IOU Image
+		- i86bi-linux-l2-adventerprise-15.1b.bin
+
+2.- VPC Commands 
+
+- PC1> ip 10.0.0.200 10.0.0.1 24
+- PC1> show 
+
+- PC2> ip 10.0.0.201 10.0.0.1 24
+- PC2> show
+
+3.- Switch
+
+- Switch# vlan 2
+- Switch# name IT
+- Switch# vlan 3
+- Switch# name ACC
+- Switch# show vlan brief
+- Switch# conf t (global config mode)
+- Switch# int ethernet 0/0
+- Switch# switchport access vlan 2
+- Switch# interface ethernet 1/0
+- Switch# switchport access vlan 3
+- Switch# int vlan 2
+- Switch# ip address 10.0.0.1 255.255.255.0
+- Switch# no shutdown
+- Switch# int vlan 3
+- Switch# ip address 10.0.1.1 255.255.255.0
+- Switch# no shutdown
+
+- Switch# show ip route
+
+--------
+ Lab #2
+--------
+
+- conf t (config global)
+- interface fastethernet 0/1
+- switchport mode access
+- switchport access vlan 10
+- exit, exit
+- show vlan
