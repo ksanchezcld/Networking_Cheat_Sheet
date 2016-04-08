@@ -1,0 +1,304 @@
+---------------------
+ Basic Configuration
+----------------------
+
+- enable
+- configure terminal
+- interface gigabitEthernet 0
+- nameif management
+- management-only
+- ip address 10.0.0.200 255.255.255.0
+- no shutdown
+- exit
+- copy tftp flash (How to transfer ASDM)
+      - IP
+      - PATH
+- conf t
+- username cisco password cisco privilege 15
+- http server enable
+- http server 0.0.0.0 0.0.0.0 management
+
+
+
+
+-----
+ LAB
+-----
+
+http://www.cisco.com/c/en/us/support/docs/security/asa-5500-x-series-next-generation-firewalls/118962-configure-asa-00.html
+
+CLI Configuration
+
+Use this information in order to configure the ASA via the CLI:
+ASA# show running-config
+
+ASA Version 9.1(5)
+!
+hostname ASA
+!
+interface GigabitEthernet0/0
+ nameif inside
+ security-level 100
+ ip address 192.168.10.1 255.255.255.0
+!
+interface GigabitEthernet0/1
+ nameif outside
+ security-level 0
+ ip address 203.0.113.1 255.255.255.0
+!
+interface GigabitEthernet0/2
+ nameif backup
+ security-level 0
+ ip address 198.51.100.1 255.255.255.0
+
+!--- The interface attached to the Secondary ISP.
+!--- "backup" was chosen here, but any name can be assigned.
+ 
+!
+interface GigabitEthernet0/3
+ shutdown
+ no nameif
+ no security-level
+ no ip address
+!
+interface GigabitEthernet0/4
+ no nameif
+ no security-level
+ no ip address
+!
+interface GigabitEthernet0/5
+ no nameif
+ no security-level
+ no ip address
+!
+interface Management0/0
+ management-only
+ no nameif
+ no security-level
+ no ip address
+!
+boot system disk0:/asa915-smp-k8.bin
+ftp mode passive
+clock timezone IND 5 30
+object network Inside_Network
+ subnet 192.168.10.0 255.255.255.0
+object network inside_network
+ subnet 192.168.10.0 255.255.255.0
+pager lines 24
+logging enable
+mtu inside 1500
+mtu outside 1500
+mtu backup 1500
+icmp unreachable rate-limit 1 burst-size 1
+no asdm history enable
+arp timeout 14400
+no arp permit-nonconnected
+!
+object network Inside_Network
+ nat (inside,outside) dynamic interface
+object network inside_network
+ nat (inside,backup) dynamic interface
+
+!--- NAT Configuration for Outside and Backup
+ 
+route outside 0.0.0.0 0.0.0.0 203.0.113.2 1 track 1
+
+!--- Enter this command in order to track a static route.
+!--- This is the static route to be installed in the routing 
+!--- table while the tracked object is reachable.  The value after
+!--- the keyword "track" is a tracking ID you specify. 
+
+route backup 0.0.0.0 0.0.0.0 198.51.100.2 254
+
+!--- Define the backup route to use when the tracked object is unavailable. 
+!--- The administrative distance of the backup route must be greater than 
+!--- the administrative distance of the tracked route.
+!--- If the primary gateway is unreachable, that route is removed
+!--- and the backup route is installed in the routing table
+!--- instead of the tracked route. 
+
+timeout xlate 3:00:00
+timeout pat-xlate 0:00:30
+timeout conn 1:00:00 half-closed 0:10:00 udp 0:02:00 icmp 0:00:02
+timeout sunrpc 0:10:00 h323 0:05:00 h225 1:00:00 mgcp 0:05:00 mgcp-pat 0:05:00
+timeout sip 0:30:00 sip_media 0:02:00 sip-invite 0:03:00 sip-disconnect 0:02:00
+timeout sip-provisional-media 0:02:00 uauth 0:05:00 absolute
+timeout tcp-proxy-reassembly 0:01:00
+timeout floating-conn 0:00:00
+ 
+sla monitor 123
+ type echo protocol ipIcmpEcho 4.2.2.2 interface outside
+ num-packets 3
+ frequency 10
+ 
+!--- Configure a new monitoring process with the ID 123.  Specify the
+!--- monitoring protocol and the target network object whose availability the tracking
+!--- process monitors.  Specify the number of packets to be sent with each poll.
+!--- Specify the rate at which the monitor process repeats (in seconds).
+
+sla monitor schedule 123 life forever start-time now
+
+!--- Schedule the monitoring process.  In this case the lifetime
+!--- of the process is specified to be forever.  The process is scheduled to begin
+!--- at the time this command is entered.  As configured, this command allows the
+!--- monitoring configuration specified above to determine how often the testing
+!--- occurs.  However, you can schedule this monitoring process to begin in the
+!--- future and to only occur at specified times.
+
+crypto ipsec security-association pmtu-aging infinite
+crypto ca trustpool policy
+!
+track 1 rtr 123 reachability
+
+!--- Associate a tracked static route with the SLA monitoring process.
+!--- The track ID corresponds to the track ID given to the static route to monitor:
+!--- route outside 0.0.0.0 0.0.0.0 10.0.0.2 1 track 1
+!--- "rtr" = Response Time Reporter entry.  123 is the ID of the SLA process
+!--- defined above.
+
+telnet timeout 5
+ssh stricthostkeycheck
+ssh timeout 5
+ssh key-exchange group dh-group1-sha1
+console timeout 0
+priority-queue inside
+threat-detection statistics access-list
+no threat-detection statistics tcp-intercept
+!
+class-map inspection_default
+ match default-inspection-traffic
+!
+!
+policy-map type inspect dns preset_dns_map
+ parameters
+  message-length maximum client auto
+  message-length maximum 512
+policy-map global_policy
+ class inspection_default
+  inspect dns preset_dns_map
+  inspect ftp
+  inspect h323 h225
+  inspect h323 ras
+  inspect rsh
+  inspect rtsp
+  inspect esmtp
+  inspect sqlnet
+  inspect skinny
+  inspect sunrpc
+  inspect xdmcp
+  inspect sip
+  inspect netbios
+  inspect tftp
+  inspect ip-options
+  inspect icmp
+!
+service-policy global_policy global
+
+
+Use these show commands in order to verify that your configuration is complete:
+show running-config sla monitor – The output of this command displays the SLA commands in the configuration.
+ASA# show running-config sla monitor
+sla monitor 123
+ type echo protocol ipIcmpEcho 4.2.2.2 interface outside
+ num-packets 3
+ frequency 10
+sla monitor schedule 123 life forever start-time now
+show sla monitor configuration – The output of this command displays the current configuration settings of the operation.
+ASA# show sla monitor configuration 123
+IP SLA Monitor, Infrastructure Engine-II.
+Entry number: 123
+Owner:
+Tag:
+Type of operation to perform: echo
+Target address: 4.2.2.2
+Interface: outside
+Number of packets: 3
+Request size (ARR data portion): 28
+Operation timeout (milliseconds): 5000
+Type Of Service parameters: 0x0
+Verify data&colon; No
+Operation frequency (seconds): 10
+Next Scheduled Start Time: Start Time already passed
+Group Scheduled : FALSE
+Life (seconds): Forever
+Entry Ageout (seconds): never
+Recurring (Starting Everyday): FALSE
+Status of entry (SNMP RowStatus): Active
+Enhanced History:
+show sla monitor operational-state – The output of this command displays the operational statistics of the SLA operation.
+
+Before the primary ISP fails, this is the operational state:
+ASA# show sla monitor operational-state 123
+Entry number: 123
+Modification time: 13:30:40.672 IND Sun Jan 4 2015
+Number of Octets Used by this Entry: 2056
+Number of operations attempted: 46
+Number of operations skipped: 0
+Current seconds left in Life: Forever
+Operational state of entry: Active
+Last time this entry was reset: Never
+Connection loss occurred: FALSE
+Timeout occurred: FALSE
+Over thresholds occurred: FALSE
+Latest RTT (milliseconds): 1
+Latest operation start time: 13:38:10.672 IND Sun Jan 4 2015
+Latest operation return code: OK
+RTT Values:
+RTTAvg: 1       RTTMin: 1       RTTMax: 1
+NumOfRTT: 3     RTTSum: 3       RTTSum2: 3
+After the primary ISP fails (and the ICMP echoes time-out), this is the operational state:
+ASA# show sla monitor operational-state
+Entry number: 123
+Modification time: 13:30:40.671 IND Sun Jan 4 2015
+Number of Octets Used by this Entry: 2056
+Number of operations attempted: 57
+Number of operations skipped: 0
+Current seconds left in Life: Forever
+Operational state of entry: Active
+Last time this entry was reset: Never
+Connection loss occurred: FALSE
+Timeout occurred: TRUE
+Over thresholds occurred: FALSE
+Latest RTT (milliseconds): NoConnection/Busy/Timeout
+Latest operation start time: 13:40:00.672 IND Sun Jan 4 2015
+Latest operation return code: Timeout
+RTT Values:
+RTTAvg: 0       RTTMin: 0       RTTMax: 0
+NumOfRTT: 0     RTTSum: 0       RTTSum2: 0
+Confirm that the Backup Route is Installed (CLI Method)
+
+Enter the show route command in order to confirm that the backup route is installed.
+Before the primary ISP fails, the routing table appears similar to this:
+ASA# show route
+
+Codes: C - connected, S - static, I - IGRP, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default, U - per-user static route, o - ODR
+       P - periodic downloaded static route
+
+Gateway of last resort is 203.0.113.2 to network 0.0.0.0
+
+C    203.0.113.0 255.255.255.0 is directly connected, outside
+C    192.168.10.0 255.255.255.0 is directly connected, inside
+C    198.51.100.0 255.255.255.0 is directly connected, backup
+S*   0.0.0.0 0.0.0.0 [1/0] via 203.0.113.2, outside
+After the primary ISP fails, the static route is removed, and the backup route is installed, the routing table appears similar to this:
+ASA# show route
+
+Codes: C - connected, S - static, I - IGRP, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default, U - per-user static route, o - ODR
+       P - periodic downloaded static route
+
+Gateway of last resort is 198.51.100.2 to network 0.0.0.0
+
+C    203.0.113.0 255.255.255.0 is directly connected, outside
+C    192.168.10.0 255.255.255.0 is directly connected, inside
+C    198.51.100.0 255.255.255.0 is directly connected, backup
+S*   0.0.0.0 0.0.0.0 [254/0] via 198.51.100.2, backup

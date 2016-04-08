@@ -1,0 +1,8 @@
+
+Point-to-Point Protocol (PPP) 
+
+is an open standard protocol that is mostly used to provide connections over point-to-point serial links. The main purpose of PPP is to transport Layer 3 packets over a Data Link layer point-to-point link. PPP can be configured on:
+
++ Asynchronous serial connection like Plain old telephone service (POTS) dial-up
++ Synchronous serial connection like Integrated Services for Digital Network (ISDN) or point-to-point leased lines.
+
