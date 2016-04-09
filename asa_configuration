@@ -3,12 +3,13 @@
 ----------------------
 
 - enable
-- configure terminal
+- configure terminal (conf t) - Configuracion Global
 - interface gigabitEthernet 0
 - nameif management
 - management-only
 - ip address 10.0.0.200 255.255.255.0
 - no shutdown
+- show int ip br
 - exit
 - copy tftp flash (How to transfer ASDM)
       - IP
@@ -18,6 +19,7 @@
 - http server enable
 - http server 0.0.0.0 0.0.0.0 management
 
+- show run (show script config)
 
 
 

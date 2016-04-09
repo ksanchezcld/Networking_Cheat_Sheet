@@ -84,3 +84,47 @@ Notas:
 - switchport access vlan 10
 - exit, exit
 - show vlan
+
+---------
+- show flash (muestra la BD de la Vlan en el Switch)
+- show vlan (muestra las Vlans configuradas)
+- conf t
+- (config)# vlan
+- (config)#vlan 10
+- (config-vlan)# name Vlan_oficina1
+- (config-vlan)# exit
+- (conf)# vlan 20
+- (config-vlan)# name Pta_baja
+- exit
+- (conf)# vlan 30
+- (config-vlan)# name Pta_Servidores
+- vlan (para ver la lista de Vlans creadas)
+
+Configurando VLAN de Acceso
+
+- conf t
+- (conf)interface fastEthernet 0/1
+- (config-if)# switchport mode access      (Switchport: indica que el modo del puerto es de nivel 2, access: creara una Vlan tipo acceso).
+- (config-if)# switchport access vlan 10
+
+- (config)# int fastEthernet 0/2
+- (config-if)# switchport mode access
+- (config-if)# switchport access vlan 15
+
+------------------------
+Configurando VLAN Trunk
+------------------------
+- conf t
+- (config)# int fastEthernet 0/3
+- (config-if)# switchport encapsulation dot1q
+- (config-if)# switchport mode trunk
+- (config-if)# end
+- # show interface trunk
+- # show ip int brief 
+- # show interface fastEthernet 0/9 switchport
+
+- (config)# s fastEthernet 0/9
+- (config-if)# switchport trunk all
+- (config-if)# switch port trunk allowed vlan 1,10-25,30,40-199,1002-1005
+- (config-if)# end
+- # show interfaces fastEthernet 0/9 switchport
