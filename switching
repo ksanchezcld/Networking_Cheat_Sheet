@@ -128,3 +128,17 @@ Configurando VLAN Trunk
 - (config-if)# switch port trunk allowed vlan 1,10-25,30,40-199,1002-1005
 - (config-if)# end
 - # show interfaces fastEthernet 0/9 switchport
+
+Eliminar una VLAN creada.
+
+- conf t
+- (config-if)# fas 0/9
+- (config-if)# switchport allowed vlan remover 19
+- (config-if)# end
+- (config-if)# show interfaces fastEthernet 0/9 switchport 
+
+--------------
+More Commands
+--------------
+
+- Show vlan-switch brief
