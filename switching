@@ -137,8 +137,104 @@ Eliminar una VLAN creada.
 - (config-if)# end
 - (config-if)# show interfaces fastEthernet 0/9 switchport 
 
+----------
+ LAB VTP
+----------
+- show vlan
+- show vtp status
+- show vlan brief
+- show interface fas 0/9 switchport
+- show ip interface brief
+- show cdp neighbors
+- conf t
+- vtp password ****
+- (config) vlan 8 								 :: Crea una Vlan
+- (config) name vlan_down_floor
+- end											 :: Sale de la sesion actual.
+- no vlan 8  									 :: Elimina Vlan
+- vtp mode client
+- vtp domain <nombre_dominio>					 :: crea un nombre de dominio.
+- vtp pruning
+- no vtp pruning
+
 --------------
-More Commands
+ LAB #2 VTP
 --------------
+- SERVER -
+sw1(config)#vtp domain christer 
+sw1(config)#vtp mode server 
+sw1(config)#vtp password cisco 
+sw1(config)#vtp version 2
+
+- CLIENTE -
+sw3(config)#vtp domain christer 
+sw3(config)#vtp mode client 
+sw3(config)#vtp password cisco 
+sw3(config)#vtp version 2
+
+- TRANSPARENTE -
+sw2(config)#vtp domain christer 
+sw2(config)#vtp mode transparent 
+sw2(config)#vtp password cisco 
+sw2(config)#vtp version 2
+
+---------------
+ LAB INE GNS3 
+---------------
+- https://streaming.ine.com/play/626ef2af-cd72-4c62-a9f0-4b256be34945/watch#
+
+- # conf t
+- (config)# int range fast 1/0 -1
+- (config-if-range)# switchport
+- (config-if-range)# switchport mode access
+- (config-if-range)# switchport access vlan 1
+- (config-if-range)# no shut
+- (config-if-range)# exit
+- (config)#
+
+- (config)# int range fast 1/2 -3
+- (config-if-range)# switchport
+- (config-if-range)# switchport mode access
+- (config-if-range)# switchport access vlan 2
+- (config-if-range)# no shut
+- (config-if-range)# exit
+- (config)# end
+- #
+
+:: Creating Trunk ::
+
+- (config)# int fast 1/4
+- (config-if)# speed 100
+- (config-if)# duplex full 
+- (config-if)# switchport mode trunk
+- (config-if)# no shut
+- (config-if)# exit
+- (config)# end
+- # show vlan-switch br
+- # show interface trunk
+- # show run interface fast 1/4
+- # show interface fast 1/4
+
+:: Config Router ::
+
+- # show run | begin interface FastEthernet0/1
+- # show interface fast 0/1
+- # show cdp neigh 
+
+***** END OF LAB ******
+
+
+:: Configuring speed of routers/switches ::
+
+- # config t
+- (config-if)# int fast 0/0
+- (config-if)# shut         :: shutdown the interface before change a config.
+- (config-if)# duplex full
+- (config-if)# no shut
+- (config-if)# end
+
+---------------
+ More Commands
+---------------
 
 - Show vlan-switch brief

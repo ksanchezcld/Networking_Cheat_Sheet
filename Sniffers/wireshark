@@ -1,0 +1,11 @@
+ip.addr==10.2.3.4 && port==80
+Only display port 80 traffic to or from 10.2.3.4
+!arp && !icmp
+Display all traffic except ARP and ICMP traffic
+bootp || dns
+Only display BOOTP/DHCP or DNS traffic
+tcp contains "PASS"
+Only display packets that have the ASCII string "PASS" in the TCP segment—this is a case sensitive filter
+dns.count.answers > 2
+Only display DNS responses that contain more than two answers
+tcp matches "\.(?i)zip"

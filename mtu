@@ -1,0 +1,21 @@
+Unidad máxima de transferencia
+
+La unidad máxima de transferencia (Maximum Transmission Unit - MTU) es un término de redes de computadoras que expresa el tamaño en bytes de la unidad de datos más grande que puede enviarse usando un protocolo de comunicaciones.
+
+Ejemplos de MTU para distintos protocolos usados en Internet:
+
+Ethernet: 1500 bytes
+PPPoE: 1492 bytes
+ATM (AAL5): 8190 bytes
+FDDI: 4470 bytes
+PPP: 576 bytes
+
+Para el caso de IP, el máximo valor de la MTU es 65.536 bytes.
+
+Por defecto, el tamaño de datagrama IP es de 576 bytes. 
+
+En el caso de TCP/UDP, el valor máximo está dado por el MSS (Maximum Segment Size), y toma su valor en función de tamaño máximo de datagrama, dado que el MTU = MSS + cabeceras IP + cabeceras TCP/UDP. En concreto, el máximo tamaño de segmento es igual al máximo tamaño de datagrama menos 40 (que es número mínimo de bytes que ocuparán las cabeceras IP y TCP/UDP en el datagrama).
+
+
+
+https://es.wikipedia.org/wiki/Unidad_m%C3%A1xima_de_transferencia
