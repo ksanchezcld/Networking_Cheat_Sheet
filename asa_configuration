@@ -304,3 +304,99 @@ C    203.0.113.0 255.255.255.0 is directly connected, outside
 C    192.168.10.0 255.255.255.0 is directly connected, inside
 C    198.51.100.0 255.255.255.0 is directly connected, backup
 S*   0.0.0.0 0.0.0.0 [254/0] via 198.51.100.2, backup
+
+
+-----------------------
+Configuring trunk link and sub-interfaces between ASA and Switch
+On the outside physical interface of switch1:
+            Interface f0/10
+            Switchport mode trunk
+            No shutdownOn the inside interface of ASA firewall:
+            Interface f0/3
+            Switchport mode trunk
+            Switchport trunk allowed vlan 20,10
+            No shutdown
+            Interface f0/3.1
+            Vlan 20 [ or use encapsulation command]
+            No shutdown
+            Interface f0/3.2
+            Vlan 10 [ or use encapsulation command]
+            No shutdown
+Note: the command used to create trunk link between two networking devices should be used once between router and switch and must be used twice between firewall and switch on each opposite interface
+Configure an ASA interface
+Interface eth0/0
+Nameif outside [ or inside]
+Ip address ip-address [subnet-mask]
+Speed [ auto | 10 | 100 | 1000]
+Duplex [ auto | full | half]
+Ip address dhcp [setroute]
+Security-level [level:0-100]
+When configuring interfaces with same security level, a command must be explicitly configured to allow traffic between them
+            Same-security-traffic permit inter-interface
+Configuring and changing MTU size for each interface to carry larger packets
+            Mtu if_name bytes
+Enabling Jumbo frame processing. This applicable only on ASA 5580
+            Jumbo-frame reservation
+Verifying the status of an interface
+            Show interface if_name
+Verifying the status of all interfaces
+            Show interface ip brief
+The ASA does not forward DHCP requests by default so it needs to be configured to use dhcp relay agent
+            Dhcprelay server ip-address interface
+            Dhcprelay enable interface
+Note that in the first command, the refered interface is the one connected to the DHCP Server or gateway while the second interface in the second command is the one facing the clients
+Enabling DHCP Server on ASA to assign IP addresses to clients
+            Dhcp enable interface
+            Dhcp address ip1-ip2 interface              [address pool]
+Delivering DNS addresses to clients
+            Dhcp dns ip1 ip2
+Delivering the domain name to the clients
+            Dhcp domain  your-domain
+Configuring default and static routes
+            Route [ inside – outside ]  [ dest ] [ dest-subnet mask ] [next hop gateway ]
+            Route [ inside – outside ] 0.0.0.0  0.0.0.0  [next hop gateway ]
+Configuring RIPV2 to Exchange routing information with other RIPv2 routers.
+            Access-list  [Access-list name ] standard [ permi tor deny ] [ network ip ] [ subnet mask ]
+            Router rip
+            Version 2
+            No auto-summary
+            Default-information orginiate [ to advertise static routes ]
+            Network [ the IP of the  intended network to be advertised ]
+            Distribute-list [Access-list name used above ] [ in or out ]] interface [ inside or outside]
+            Exit
+            İnterface eth0/2
+            Rip authentication  mode md5
+            Rip authentication key [ your key ] key_id [id]
+Configuring EIGRP routing on ASA
+          Router eigrp [AS number]
+            Network ip-addr [mask]
+            İnterface [interface]
+            Summary-address eigrp [AS number] [ip-addr] [ mask] [AD]
+Redistribute routes that are learned through RIPv2, Static routes or Directly connected routes
+          Redistribute [ rip | static | connected ] [metric : bandwidth | delay | reliability | load | mtu ] [ route-map map_name]
+
+Define default metric for redistribution with different routes
+          Default-metric bandwidth delay reliability loading mtu
+
+Securing EIGRP routes
+          İnterface interface
+            Authentication mode eigrp AS number md5
+            Authentication key eigrp AS number key-string key_id key_id
+
+Filtering routing updates
+          Access-list  [Access-list name ] standard [ permi tor deny ] [ network ip ] [ subnet mask ]
+ 
+          Distribute-list [Access-list name used above ] [ in or out ]] interface [ inside or outside]
+
+Configure OSPF on ASA
+          Router ospf pid
+            Router-id ip_addr
+            Network ip_addr netmask area area_id
+            Area area_id authentication md5
+            İnterface interface
+            Ospf message-digest-key key_id md5 key
+            Ospf authentication –message-digest
+            Prefix-list list_name [permit | deny ] network_ip ge min_bit le max_bit
+            Area area_id filter-list prefix list_name [in | out ]
+
+https://www.cybrary.it/0p3n/cisco-asa-firewall-commands-sheet-cheat-1/
