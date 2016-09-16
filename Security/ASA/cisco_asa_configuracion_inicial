@@ -1,0 +1,18 @@
+CISCO ASA - CONFIGURACION INICIAL DE ASDM
+
+ASDM = Adaptive Security Device Manager
+
+Como habilitar el ASDM de un  ASA:
+
+Es importante tener la imagen del ASDM disponible dentro de la unidad de almacenamiento del ASA.
+
+Pasos a realizar:
+
+Definir la imagen del ASDM (De no tener una disponible, descargarla directamente del site de Cisco)
+asdm image disk0:/asdm645.bin
+
+Habilitamos el servicio HTTP
+http server enable
+
+Especificamos las direcciones IP de los que van a poder acceder al ASA a través del ASDM
+http 192.168.1.0 255.255.255.0 Inside

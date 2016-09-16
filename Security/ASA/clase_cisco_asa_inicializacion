@@ -1,0 +1,33 @@
+
+CISCO ASA - INICALIZACION
+
+https://networkfaculty.com/es/video/detail/1327-cisco-asa---inicalizacion
+
+Security Levels
+
+Los niveles de seguridad son valores que van desde 0 hasta el 100 usados por el ASA para controlar el tráfico que cruza a través de él.
+
+El tráfico es permitido desde las interfaces de más alta seguridad (100) hacia las interfaces de menos seguridad (<100), pero no en el sentido inverso (de menor a mayor seguridad).
+
+Los niveles de seguridad predeterminados son 0 y 100, en donde la única zona que el ASA va a asignar de manera predeterminada el nivel de seguridad de 100 es “Inside”.
+
+NameIf
+
+El comando “nameIf” asigna un nombre a la interfaz, seguido de un nivel de seguridad (que va a ser en la mayoría de los casos “0” a excepción del nombre “Inside”).
+
+Es necesario que las interfaces tengan un nombre asignado, de lo contrario el ASA no va a usarlas para enviar o recibir tráfico.
+
+-------------
+Escenario #1
+-------------
+En gran cantidad de escenarios lo que se va a manejar es la conexión de un router de frontera y luego la conexión del Firewall (donde este realizaría tareas como NAT, por ejemplo).
+
+Pero como todo, depende (ya que inclusive pueden haber hasta limitaciones económicas).
+
+Para una única conexión a Internet que maneje la empresa, podrías conectar el firewall directamente al ISP (si la conexión entre el Firewall y el Proveedor lo permite -usando Ethernet por ejemplo) y luego realizar tareas como NAT directamente en el firewall (y es una solución bastante común)
+
+Por otro lado, te dejo acá un link con una guía de Cisco en donde trata un escenario similar al que planteas (y con las respectivas políticas que sugiere Cisco configurar). En donde para una conexión a Internet se plantea el uso de un Router fronterizo (usando ASR) y luego uno o dos ASAs.
+
+Si puedes mira el documento, creo que te puede servir de guía.
+
+http://www.cisco.com/c/dam/en/us/td/docs/solutions/CRD/Jul2015/CRD-Internet_Edge_Design_Jul2015.pdf

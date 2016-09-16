@@ -2,26 +2,157 @@
  Basic Configuration
 ----------------------
 
+- conf t :: global configuration mode.
+
+- show mode :: shows the ASA's operation mode.
+
+- show firewall :: 
+
+- show conn :: Shows ASA's connections.
+
+- show running config :: show the ASA's configuration.
+
+- show running-config policy-mal
+
+- show interface ip breaf | i 30 :: shows the interface operation.
+
+- nameif :: configure a name to the interface.
+
+- ip address <IP> <MASK> :: Set an ip/mac address.
+
+- security-level 100 :: Set a security level.
+
+- clear configure all :: delete the ASA's configuration.
+
 - enable
+
 - configure terminal (conf t) - Configuracion Global
+
 - interface gigabitEthernet 0
-- nameif management
-- management-only
+
+- interface giga 0/3.30 :: set a VLAN tag to interface 0/3
+
+- vlan 30 :: Set a VLAN.
+
 - ip address 10.0.0.200 255.255.255.0
-- no shutdown
-- show int ip br
+
+- no shutdown (no shut) :: enable the interface.
+
 - exit
+
 - copy tftp flash (How to transfer ASDM)
       - IP
       - PATH
-- conf t
+
 - username cisco password cisco privilege 15
+
 - http server enable
+
 - http server 0.0.0.0 0.0.0.0 management
 
-- show run (show script config)
+- ASA(config)# show run :: show script config.
+
+- ASA(config)# show interface
+
+- ASA(config)# terminal width 350 (Adjust the terminal's width)
+
+- ASA(config)# hostname asa :: set a name to the asa. 
+
+- loggin on 
+
+- loggin console 7
+
+-  wr mem  :: Save all changes to Memory.
+
+-----------------------
+ Configuring Interface
+-----------------------
+
+- ASA(config)# interface GigabitEthernet1/1
+
+- ASA(config-if)# description here....
+
+- ASA(config-if)# nameif outside
+
+- ASA(config-if)# security-level 0 
+
+- ASA(config-if)# ip address 1.1.1.2 255.255.255.0
+
+- ASA(config-if)# no shut (Enabling interface)
+
+----------------------------
+ Configuring Statical Route
+----------------------------
+
+- ASA(config-if)# route outside 0.0.0.0 0.0.0.0 1.1.1.1
+- ASA(config-if)# nat (inside,outside) after-auto source dynamic any interface
+
+-----------------
+ Configuring DHCP
+-----------------
+
+- ASA(config-if)# dhcpd address 192.168.1.100-192.168.1.150 inside
+- ASA(config-if)# dhcpd dns 8.8.8.8 8.8.4.4 4.4.4.4 interface inside
+- ASA(config-if)# dhcpd enable inside 
+- ASA(config-if)# dns domain-lookup outside
+- ASA(config-if)# dns server-group DefaultDNS
+- ASA(config-dns...)# name-server 8.8.8.8 8.8.4.4 4.4.4.4 outside
+- ASA(config-dns...)# domain-name domain.local
+- ASA(config-dns...)# policy-map global_policy
+- ASA(config-pmap)# class inspection_default
+- ASA(config-pmap)# inspect icmp 
+- ASA(config-pmap)# inspect icmp error
+- ASA(config-pmap)# username cisco password **** privilege 15   (Configure Local Admin)
+- ASA(config)# enable passord ****
+- # wr mem  (Save all changes to Memory)
+
+---------------------
+ Configurin Routing
+---------------------
+
+- show route
+- show int ip br (Show internal ip brief)
+- show nameif
+- conf t
+- route outside 0.0.0.0 0.0.0.0 192.168.1.1 or route outside 0 0 192.168.1.1
+- route inside 10.20.20.20.0 255.255.255.0 10.10.10.1 
+- show route
+- 
 
 
+--------------------------------------
+Viewing Local Command Privilege Levels
+--------------------------------------
+
+- show running-config all privilege all
+
+------------------------
+ Enabling Telnet/SSH Management
+------------------------
+
+- logon from terminal (telnet/ssh)
+- en
+- password
+- conf t
+- ASA(config)# telnet 192.168.1.0 255.255.255.0 inside 
+- ASA(config)# password p@1234
+- ASA(config)# telnet timeout 10 (time of sesion duration)
+
+For SSH Service it's the same steps with this aditionals:
+
+- ASA(config)# crypto keys generate rsa modulus 1024
+- ASA(config)# ssh 192.168.1.1 255.255.255.0 inside
+- ASA(config)# ssh timeout 10 
+
+===================
+Newer versions 9.X 
+===================
+SSH Access to the Security Appliance
+
+- ASA(config)# username username password password
+- ASA(config)# aaa authentication {telnet | ssh | http | serial} console {LOCAL | server_group [LOCAL]} 
+
+- crypto key generate rsa modulus modulus_size
 
 -----
  LAB
