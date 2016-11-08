@@ -1,0 +1,24 @@
+________
+|
+|
+
+----------------------------
+Configuring a server switch
+----------------------------
+- vtp domain <DOMAIN NAME> :: Configure VTP's Domain
+- vtp version 2
+- vtp mode server
+- vtp password <PWD> :: Password Configuration.
+
+----------------------
+Configuring the Client
+----------------------
+- vtp mode client
+- vtp domain <DOMAIN NAME>
+- conf term
+- vtp mode server :: First switch to server mode to change the version.
+- vtp version 2
+- vtp password <PWD>
+- vtp status
+
+

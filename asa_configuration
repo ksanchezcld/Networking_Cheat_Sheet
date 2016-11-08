@@ -2,7 +2,7 @@
  Basic Configuration
 ----------------------
 
-- conf t :: global configuration mode.
+- conf t :: configure terminal.
 
 - show mode :: shows the ASA's operation mode.
 
@@ -10,11 +10,21 @@
 
 - show conn :: Shows ASA's connections.
 
-- show running config :: show the ASA's configuration.
+- show conn all
 
-- show running-config policy-mal
+- show conn detail
+
+- show flash :: to see the ASDM .bin image 
+
+- show asdm image flash:/asdm-730.bin
 
 - show interface ip breaf | i 30 :: shows the interface operation.
+
+- show running config :: show the ASA's configuration.
+
+- show running-config policy-map
+
+- inspect icmp :: permit ping from pont A to B.
 
 - nameif :: configure a name to the interface.
 
@@ -23,6 +33,8 @@
 - security-level 100 :: Set a security level.
 
 - clear configure all :: delete the ASA's configuration.
+
+- configure factory-default :: reset the ASA to factory.
 
 - enable
 
@@ -126,9 +138,9 @@ Viewing Local Command Privilege Levels
 
 - show running-config all privilege all
 
-------------------------
+-------------------------------
  Enabling Telnet/SSH Management
-------------------------
+-------------------------------
 
 - logon from terminal (telnet/ssh)
 - en
